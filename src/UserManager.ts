@@ -195,6 +195,32 @@ export class UserManager {
     }
 
     /**
+     * Returns the URL for the authorization endpoint.
+     *
+     * @returns A promise containing the URL.
+     */
+    public async getSigninRedirectUrl(args: SigninRedirectArgs = {}): Promise<string> {
+        this._logger.create("getSigninRedirectUrl");
+        const {
+            redirectMethod,
+            ...requestArgs
+        } = args;
+
+        let dpopJkt: string | undefined;
+        if (this.settings.dpop?.bind_authorization_code) {
+            dpopJkt = await this.generateDPoPJkt(this.settings.dpop);
+        }
+
+        const signinRequest = await this._client.createSigninRequest({
+            request_type: "si:r",
+            dpopJkt,
+            ...requestArgs,
+        });
+
+        return signinRequest.url;
+    }
+
+    /**
      * Process the response (callback) from the authorization endpoint.
      * It is recommended to use {@link UserManager.signinCallback} instead.
      *
