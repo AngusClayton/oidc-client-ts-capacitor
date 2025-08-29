@@ -1014,6 +1014,7 @@ export class UserManager {
     protected readonly _events: UserManagerEvents;
     // (undocumented)
     generateDPoPJkt(dpopSettings: DPoPSettings): Promise<string | undefined>;
+    getSigninRedirectUrl(args?: SigninRedirectArgs): Promise<string>;
     getUser(raiseEvent?: boolean): Promise<User | null>;
     // (undocumented)
     protected readonly _iframeNavigator: INavigator;
